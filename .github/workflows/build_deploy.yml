@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }},"ghcr.io/arkemishub/arke-website:latest"
+          tags: ${{ steps.meta.outputs.tags }},"ghcr.io/arkemis/arke-website:latest"
           labels: ${{ steps.meta.outputs.labels }}
 
       # Get the GKE credentials, so we can deploy to the cluster

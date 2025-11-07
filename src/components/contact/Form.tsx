@@ -14,7 +14,7 @@ export default function ContactForm() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log(data);
-    const mail = "info@mokkastudios.com";
+    const mail = "info@arkemis.it";
     const subject = "Arke - Information";
     const body = `Name: ${data.name ?? "-"}%0D%0APhone: ${
       data.phone ?? "-"

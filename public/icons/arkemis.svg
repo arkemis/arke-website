@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="900" viewBox="0 0 900 900">
+  <defs>
+    <clipPath id="clip-Logo_Square_1">
+      <rect width="900" height="900"/>
+    </clipPath>
+  </defs>
+  <g id="Logo_Square_1" data-name="Logo Square – 1" clip-path="url(#clip-Logo_Square_1)">
+    <g id="Raggruppa_21" data-name="Raggruppa 21" transform="translate(116.581 277)">
+      <path id="Tracciato_1" data-name="Tracciato 1" d="M-5.058,458.357c107.407-290.977,107.7-290.522,107.7-290.522h47.761L257.57,458.357h-35.9L126.007,196.29,29.29,458.357Z" transform="translate(28.477 -139.82)" fill="#fff"/>
+      <path id="Tracciato_2" data-name="Tracciato 2" d="M414.783,168.282H491.2V428.528h42.854v30.34H414.783v-30.34h42.99V197.6h-42.99Z" transform="translate(-63.285 -140.268)" fill="#fff"/>
+      <path id="Tracciato_3" data-name="Tracciato 3" d="M228,309.107,331.4,459.883h42.026L267.678,309.107l100.8-140.825H326.595Z" transform="translate(269.362 -141.282)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
