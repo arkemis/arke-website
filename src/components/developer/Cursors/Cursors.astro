@@ -1,134 +1,95 @@
+---
+const cursors = [
+    { name: "Victor", from: "#8ef5a8", to: "#6fdcc8" },
+    { name: "Alessandro", from: "#a5a3f7", to: "#62b8ff" },
+    { name: "Manolo", from: "#fcd99a", to: "#ff7a6b" },
+    { name: "Sam", from: "#f9b8c8", to: "#dcb0f7" },
+];
+---
 
 <div class="top-0 left-0 absolute w-full h-screen">
     <div class="relative w-full h-full">
-        <img src={`${import.meta.env.BASE_URL}collaboration/cursor_1.png`} class="cursor1 w-36"/>
-        <img src={`${import.meta.env.BASE_URL}collaboration/cursor_2.png`} class="cursor2 w-40"/>
-        <img src={`${import.meta.env.BASE_URL}collaboration/cursor_3.png`} class="cursor3 w-36"/>
-        <img src={`${import.meta.env.BASE_URL}collaboration/cursor_4.png`} class="cursor4 w-32"/>
+        {cursors.map(({ name, from, to }) => (
+            <div class="cursor" style={`--from: ${from}; --to: ${to}`}>
+                <svg width="16" height="20" viewBox="0 0 16 20" aria-hidden="true">
+                    <path d="M1.5 1.5v15.3l4.2-4h6.8z" />
+                </svg>
+                <span>{name}</span>
+            </div>
+        ))}
     </div>
 </div>
 
 <style>
 
-    img {
+    .cursor {
         position: absolute;
         z-index: -1;
         opacity: 0.5;
+        pointer-events: none;
     }
 
-    @keyframes animate-a {
-        0% {
-            top: 30%;
-            left: 20%;
-        }
-        25% {
-            top: 50%;
-            left: 18%;
-        }
-        50% {
-            top: 60%;
-            left: 52%;
-        }
-        75% {
-            top: 60%;
-            left: 72%;
-        }
-        100% {
-            top: 30%;
-            left: 20%;
-        }
+    .cursor svg {
+        fill: var(--to);
+        stroke: #fff;
+        stroke-width: 1.5;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.4));
     }
 
-    @keyframes animate-b {
-        0% {
-            top: 40%;
-            left: 82%;
-        }
-        25% {
-            top: 80%;
-            left: 20%;
-        }
-        50% {
-            top: 30%;
-            left: 8%;
-        }
-        75% {
-            top: 60%;
-            left: 52%;
-        }
-        100% {
-            top: 30%;
-            left: 82%;
-        }
-    }
-    @keyframes animate-c {
-        0% {
-            top: 70%;
-            left: 78%;
-        }
-        25% {
-            top: 34%;
-            left: 16%;
-        }
-        50% {
-            top: 27%;
-            left: 15%;
-        }
-        75% {
-            top: 68%;
-            left: 43%;
-        }
-        100% {
-            top: 70%;
-            left: 78%;
-        }
-    }
-    @keyframes animate-d {
-        0% {
-            top: 30%;
-            right: 82%;
-        }
-        25% {
-            top: 80%;
-            right: 20%;
-        }
-        50% {
-            top: 30%;
-            right: 8%;
-        }
-        75% {
-            top: 60%;
-            right: 52%;
-        }
-        100% {
-            top: 30%;
-            right: 82%;
-        }
-    }
-
-    img.cursor1 {
-        -webkit-animation: linear infinite;
-        -webkit-animation-name: animate-a;
-        -webkit-animation-duration: 20s;
-        animation-timing-function: ease-out;
-    }
-
-    img.cursor2 {
-        -webkit-animation: linear infinite;
-        -webkit-animation-name: animate-b;
-        -webkit-animation-duration: 24s;
-        animation-timing-function: ease-out;
-    }
-    img.cursor3 {
-        -webkit-animation: linear infinite;
-        -webkit-animation-name: animate-c;
-        -webkit-animation-duration: 28s;
-        animation-timing-function: ease-out;
-    }
-    img.cursor4 {
-        -webkit-animation: linear infinite;
-        -webkit-animation-name: animate-d;
-        -webkit-animation-duration: 32s;
-        animation-timing-function: ease-out;
+    .cursor span {
+        display: block;
+        margin: -4px 0 0 14px;
+        padding: 2px 10px;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, var(--from), var(--to));
+        box-shadow: 0 0 0 1.5px #fff;
+        color: #0b0b12;
+        font-size: 14px;
+        white-space: nowrap;
     }
 </style>
+
+<script>
+    // Move each cursor the way a person would: curved strokes with a
+    // minimum-jerk speed profile (gentle start, fast middle, soft landing),
+    // separated by short random pauses.
+    const random = (min, max) => min + Math.random() * (max - min);
+
+    document.querySelectorAll(".cursor").forEach((cursor) => {
+        let x = random(8, 82);
+        let y = random(25, 80);
+        const place = (left, top) => {
+            cursor.style.left = `${left}%`;
+            cursor.style.top = `${top}%`;
+        };
+        place(x, y);
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        const move = () => {
+            const toX = random(8, 82);
+            const toY = random(25, 80);
+            // Pulling the control point off the straight line bends the path into an arc
+            const cx = (x + toX) / 2 + random(-15, 15);
+            const cy = (y + toY) / 2 + random(-15, 15);
+            const duration = 600 + Math.hypot(toX - x, toY - y) * 18;
+            const start = performance.now();
+
+            const frame = (now) => {
+                const t = Math.min((now - start) / duration, 1);
+                const s = t * t * t * (t * (6 * t - 15) + 10);
+                const u = 1 - s;
+                place(u * u * x + 2 * u * s * cx + s * s * toX, u * u * y + 2 * u * s * cy + s * s * toY);
+                if (t < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    x = toX;
+                    y = toY;
+                    setTimeout(move, random(600, 3000));
+                }
+            };
+            requestAnimationFrame(frame);
+        };
+        setTimeout(move, random(0, 2000));
+    });
+</script>
